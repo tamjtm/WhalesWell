@@ -35,6 +35,16 @@ public class Book
         return bookCollection;
     }
 
+    public int getPurchaseAmount()
+    {
+        return purchasedAmount;
+    }
+
+    public ArrayList<Account> getPurchaser()
+    {
+        return purchaser;
+    }
+
     public boolean addPurchaser(Account currentPurchaser)
     {
         //if user hasn't bougth this book before
