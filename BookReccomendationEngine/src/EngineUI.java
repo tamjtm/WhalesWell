@@ -146,6 +146,7 @@ public class EngineUI
             System.out.println("  4. Search book");
             System.out.println("  5. Select book");
             System.out.println("  6. Buy book");
+            System.out.println("  7. View Profile");
             System.out.println("-------------------------------------------------");
 
             System.out.printf("Choose your command number or type quit to logout.. ");
@@ -200,6 +201,9 @@ public class EngineUI
                         System.out.println("Buying successfully");
                     }
                     break;
+                case "7":
+                    showProfilePage();
+                    break;
                 default:
                     System.out.println("\tplease try again");
                     break;
@@ -211,6 +215,77 @@ public class EngineUI
                 return;
             }
         }
+    }
+
+    private static void showProfilePage()
+    {
+        Account user = engine.getCurrentUser();
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String name = user.getName();
+        String surname = user.getSurname();
+
+        System.out.println("Name: " + name);
+        System.out.println("Surname: " + surname);
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+
+        System.out.printf("\n\tType Y to edit profile.. ");
+        String answer = IOUtils.getBareString();
+
+        // if user want to edit profile
+        if (answer.equalsIgnoreCase("Y"))
+        {
+            showEditProfilePage(user);
+        }
+        return;
+    }
+
+    private static void showEditProfilePage(Account user)
+    {
+        String confirmStatus;
+        String password;
+        String name;
+        String surname;
+
+        do
+        {
+            System.out.println("\n--------------- E D I T  P R O F I L E ---------------");
+            System.out.printf("New password: ");
+            password = IOUtils.getBareString();
+            System.out.printf("New Name: ");
+            name = IOUtils.getBareString();
+            System.out.printf("New Surname: ");
+            surname = IOUtils.getBareString();
+
+             System.out.printf("\n\tType Y to confirm registration or type cancel to go to menu.. ");
+             confirmStatus = IOUtils.getBareString();
+         }
+        while (!confirmStatus.equalsIgnoreCase("Y") && !confirmStatus.equalsIgnoreCase("cancel"));
+
+        if (confirmStatus.equalsIgnoreCase("cancel"))
+        {
+            return;
+        }
+
+        if(!password.equalsIgnoreCase("\n"))
+        {
+            System.out.println("OK!");
+            user.setPassword(password);
+        }
+
+        if(!name.equalsIgnoreCase("\n"))
+        {
+            System.out.println("OK!");
+            user.setName(name);
+        }
+
+        if(!surname.equalsIgnoreCase("\n"))
+        {
+            System.out.println("OK!");
+            user.setSurname(surname);
+        }
+
     }
 
     public static void printBooks(ArrayList<Book> books)
@@ -227,6 +302,7 @@ public class EngineUI
     public static void main(String args[])
     {
         EngineUI engineUI = new EngineUI();
+        Account testuser = new Account("tamjtm", "love", "aa", "bb");
 
         // loop until user login -> if user already login, logout
         while (engine.getCurrentUser() == null)
