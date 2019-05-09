@@ -38,3 +38,7 @@ CPE343 OOD Team Project : Book Recommendation Engine
 11th upload: update code and sequence diagram
   Code: 'Engine' class, edit contentSuggest and add commuSuggest
   Sequence: Edit Content-based suggestion diagram
+
+12th upload: update code
+  Add showEditProfilePage() and showProfilePage() method in EngineUI
+  Modify Account Class (add setter and getter method)
