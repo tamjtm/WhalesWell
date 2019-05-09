@@ -40,5 +40,5 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Sequence: Edit Content-based suggestion diagram
 
 12th upload: update code
-  Add showEditProfilePage() and showProfilePage() method in EngineUI
+  Add showEditProfilePage() and showProfilePage() method in EngineUI (ไม่แก้โปรไฟล์ไม่ได้ ถึงไม่พิมพ์ก็จะเปลี่ยนให้อยู่ดี)
   Modify Account Class (add setter and getter method)
