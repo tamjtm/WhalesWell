@@ -157,23 +157,10 @@ public class EngineUI
                     break;
                 case "2":
                     System.out.println("\nContent-based book suggestion");
-                    ArrayList<Book> suggestBook = engine.showContentSuggest();
-                    if(suggestBook != null)
-                    {
-                        printBooks(suggestBook);
-                    }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
+                    engine.showContentSuggest();
                     break;
                 case "3":
                     System.out.println("\nCommunity-based book suggestion");
-                    suggestBook = engine.showCommuSuggest();
-                    if(suggestBook != null)
-                    {
-                        printBooks(suggestBook);
-                    }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
                     break;
                 case "4":
                     String keyword = IOUtils.getString("Please enter book keyword :");
@@ -191,8 +178,6 @@ public class EngineUI
                     {
                         System.out.println("Back to Menu..");
                     }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
                     break;
                 case "6":
                     if(engine.buyBook())
@@ -213,7 +198,7 @@ public class EngineUI
         }
     }
 
-    public static void printBooks(ArrayList<Book> books)
+    private static void printBooks(ArrayList<Book> books)
     {
         Iterator<Book> bookIterator = books.iterator();
         do
@@ -222,6 +207,11 @@ public class EngineUI
             System.out.println(book);
         }
         while (bookIterator.hasNext());
+    }
+
+    public static void showProfile()
+    {
+        engine.getCurrentUser();
     }
 
     public static void main(String args[])

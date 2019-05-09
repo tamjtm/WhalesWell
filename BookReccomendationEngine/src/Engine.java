@@ -1,12 +1,10 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-
 public class Engine
 {
     static private Hashtable<String,ArrayList<Book>> bookCollection;
     private Account currentUser;
-
 
     public Engine()
     {
@@ -112,22 +110,22 @@ public class Engine
     {
         Hashtable<String, Book> bookShelf = Book.getBookCollection();
         //If there is matched book
-        if(bookShelf.containsKey(title))    
+        if(bookShelf.containsKey(title))
         {
             Book selectedBook = bookShelf.get(title);
             System.out.println(selectedBook);
-            return true;   
+            return true;
         }
         else
         {
-            System.out.println("--- Cannot find the book.");
-            return false;   
+            System.out.println("\tCannot find the book.");
+            return false;
         }
     }
 
     public boolean buyBook()
     {
-        String title = IOUtils.getString("Please enter book title");
+        String title = IOUtils.getString("Please enter book title :");
         if(printSelectedBook(title))
         {
             String response = IOUtils.getString("Confirm buying... [Y/N]");
@@ -135,7 +133,7 @@ public class Engine
             {
                 Hashtable<String, Book> bookShelf = Book.getBookCollection();
                 Book book = bookShelf.get(title);
-                
+
                 //Add book's purchaser
                 if(book.addPurchaser(currentUser))
                 {
@@ -154,109 +152,45 @@ public class Engine
         {
             return false;
         }
-        
+
     }
 
-    public ArrayList<Book> showContentSuggest()
+    public boolean showContentSuggest()
     {
-        //Find latest book from customer history
+        //Find latest book
         Customer customer = currentUser.getCustomer();
         ArrayList<History> customerHistory = customer.getPurchasedHistory();
         ArrayList<Book> suggestedBooks = new ArrayList<Book>();
-        ArrayList<Book> tempBook = new ArrayList<Book>();
-        //Haven't bought any book before  
         if(customerHistory.size()==0)
         {
             System.out.println("--- Not found book reference.");
-            return null;
         }
         else
         {
-            //Get latest book
-            Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
-            System.out.println("Reference on: \n"+latestBook+"\n");
-
+            History latestBought = customerHistory.get(customerHistory.size()-1);
+            Book latestBook = latestBought.getBook();
             for(int i=1; i<latestBook.getKeyword().size(); i++)
             {
                 String keyword = latestBook.getKeyword().get(i);
                 if(bookCollection.containsKey(keyword))
                 {
-                    tempBook = bookCollection.get(keyword);
-                    if(tempBook.size()>1)
-                   {
-                        for(int j=0;j<tempBook.size();j++)
-                        {
-                            if(!suggestedBooks.contains(tempBook.get(j)))
-                            {
-                                suggestedBooks.add(tempBook.get(j));
-                            }
-                        }
-                    }
-                }
-            }
-            if(suggestedBooks.contains(latestBook))
-            {
-                suggestedBooks.remove(latestBook);
-            }
-
-            return suggestedBooks;
-        }
-    }
-
-    public ArrayList<Book> showCommuSuggest()
-    {
-        //Find latest book from customer history
-        Customer customer = currentUser.getCustomer();
-        ArrayList<History> customerHistory = customer.getPurchasedHistory();
-        ArrayList<Book> suggestedBooks = new ArrayList<Book>();
-        //Haven't bought any book before  
-        if(customerHistory.size()==0)
-        {
-            System.out.println("--- Not found book reference.");
-            return null;
-        }
-        else
-        {
-            //Get latest book
-            Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
-            ArrayList<Account> purchaser = latestBook.getPurchaser();
-            purchaser.remove(currentUser);
-            System.out.println("Reference on: \n"+latestBook+"\n");
-            if(purchaser.size()==0)
-            {
-                System.out.println("--- No user has bought this book before.");
-                return null;
-            }
-            else
-            {
-                for(int i=0;i<purchaser.size();i++)
-                {
-                    Customer otherCustomer = purchaser.get(i).getCustomer();
-                    ArrayList<History> otherHistory = otherCustomer.getPurchasedHistory();
-                    if(otherHistory.size()>1)
+                    suggestedBooks = bookCollection.get(keyword);
+                    if(suggestedBooks.size()>0)
                     {
-                        for(int j=0;j<otherHistory.size();j++)
+                        for(int j=0;j<suggestedBooks.size();j++)
                         {
-                            Book temp = otherHistory.get(j).getBook();
-                            if(!suggestedBooks.contains(temp))
+                            if(suggestedBooks.get(j) == latestBook)
                             {
-                                suggestedBooks.add(temp);
+                                suggestedBooks.remove(j);
                             }
                         }
                     }
                 }
-                if(suggestedBooks.contains(latestBook))
-                {
-                    suggestedBooks.remove(latestBook);
-                }
-                if(suggestedBooks.size()==0)
-                {
-                    System.out.println("--- Other purchaser(s) haven't bought other book.");
-                    return null;
-                }
             }
-            return suggestedBooks;
+            System.out.println(suggestedBooks);
         }
+        return true;
+
     }
 
     public int login(String username, String password)
@@ -321,5 +255,6 @@ public class Engine
             return true;
         }
     }
+
     
 }
