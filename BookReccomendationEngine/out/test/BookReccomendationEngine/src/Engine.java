@@ -3,23 +3,15 @@ import java.util.Hashtable;
 
 public class Engine
 {
-    static private Hashtable<String,ArrayList<Book>> bookCollection;
-    private Account currentUser;
-
+    private Hashtable<String,ArrayList<Book>> bookCollection;
 
     public Engine()
     {
         bookCollection = new Hashtable<String,ArrayList<Book>>();
-        currentUser = null;
-        initializeBook();
+        initialize();
     }
 
-    public Account getCurrentUser()
-    {
-        return currentUser;
-    }
-
-    public void initializeBook()
+    public void initialize()
     {
         FileManager reader = new FileManager();
 
@@ -43,15 +35,15 @@ public class Engine
     {
         String keyword;
         ArrayList<Book> books;
-        // for each keyword
+        /* for each keyword */
         for(int i = 0; i < book.getKeyword().size(); i++)
         {
             keyword = book.getKeyword().get(i);
 
-            // if there is matched keyword
+            /* if there is matched keyword */
             if(bookCollection.containsKey(keyword))
             {
-                // get books which have matched keyword
+                /* get books which have matched keyword */
                 books = bookCollection.get(keyword);
                 if(!books.add(book))
                 {
@@ -61,7 +53,7 @@ public class Engine
             else
             {
                 books = new ArrayList<>();
-                // add first element of ArrayList
+                /* add first element of ArrayList */
                 if(!books.add(book))
                 {
                     System.out.println("Error - cannot add this book! (new keyword)");
@@ -74,82 +66,5 @@ public class Engine
     public void printAll()
     {
         System.out.println(bookCollection);
-    }
-
-    public boolean isUsernameExist(String username)
-    {
-        Hashtable<String,Account> accounts = Account.getAccountCollection();
-
-        if (accounts.containsKey(username))    // there is this username in the system
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public int login(String username, String password)
-    {
-        Hashtable<String,Account> accounts = Account.getAccountCollection();
-
-        if(!isUsernameExist(username))  // there is no this username in the system
-        {
-            System.out.println("\tERROR - " + username + " does not exist");
-            return -1;
-        }
-        else if(currentUser != null)    // there is another user in the system
-        {
-            System.out.println("\tERROR - system is busy");
-            return -2;
-        }
-        else
-        {
-            Account account = accounts.get(username);
-
-            // wrong password
-            if(account.getPassword().compareTo(password) != 0)
-            {
-                System.out.println("\tERROR - wrong password for " + username);
-                return 0;
-            }
-            else
-            {
-                currentUser = accounts.get(username);
-                currentUser.login();
-                return 1;
-            }
-        }
-    }
-
-    public boolean logout()
-    {
-        if(currentUser == null)
-        {
-            System.out.println("\tERROR - system is empty");
-            return false;
-        }
-        else
-        {
-            currentUser.logout();
-            currentUser = null;
-            return true;
-        }
-    }
-
-    public boolean register(String username, String password, String name, String surname)
-    {
-        Hashtable<String,Account> accounts = Account.getAccountCollection();
-        if (accounts.containsKey(username))    // there is this username in the system
-        {
-            System.out.println("\tERROR - " + username + " already exists");
-            return false;
-        }
-        else
-        {
-            new Account(username, password, name, surname);
-            return true;
-        }
     }
 }

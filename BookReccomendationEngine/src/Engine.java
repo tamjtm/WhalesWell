@@ -90,6 +90,93 @@ public class Engine
         }
     }
 
+    public boolean printSelectedBook(String title)
+    {
+        Hashtable<String, Book> bookShelf = Book.getBookCollection();
+        //If there is matched book
+        if(bookShelf.containsKey(title))    
+        {
+            Book selectedBook = bookShelf.get(title);
+            System.out.println(selectedBook);
+            return true;   
+        }
+        else
+        {
+            System.out.println("Cannot find the book.");
+            return false;   
+        }
+    }
+
+    public boolean buyBook()
+    {
+        String title = IOUtils.getString("Please enter book title");
+        if(printSelectedBook(title))
+        {
+            String response = IOUtils.getString("Confirm buying... [Y/N]");
+            if ((response.startsWith("Y")) || (response.startsWith("y")))
+            {
+                Hashtable<String, Book> bookShelf = Book.getBookCollection();
+                Book book = bookShelf.get(title);
+                
+                //Add book's purchaser
+                if(book.addPurchaser(currentUser))
+                {
+                    //Add book to customer's history
+                    Customer customer = currentUser.getCustomer();
+                    customer.addPurchasedHistory(book);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+
+    public boolean showContentSuggest()
+    {
+        //Find latest book
+        Customer customer = currentUser.getCustomer();
+        ArrayList<History> customerHistory = customer.getPurchasedHistory();
+        ArrayList<Book> suggestedBooks = new ArrayList<Book>();
+        if(customerHistory.size()==0)
+        {
+            System.out.println("--- Not found book reference.");
+        }
+        else
+        {
+            History latestBought = customerHistory.get(customerHistory.size()-1);
+            Book latestBook = latestBought.getBook();
+            for(int i=1; i<latestBook.getKeyword().size(); i++)
+            {
+                String keyword = latestBook.getKeyword().get(i);
+                if(bookCollection.containsKey(keyword))
+                {
+                    suggestedBooks = bookCollection.get(keyword);
+                    if(suggestedBooks.size()>0)
+                    {
+                        for(int j=0;j<suggestedBooks.size();j++)
+                        {
+                            if(suggestedBooks.get(j) == latestBook)
+                            {
+                                suggestedBooks.remove(j);
+                            }   
+                        }
+                    }
+                }
+            }
+            System.out.println(suggestedBooks);
+        }
+        return true;
+
+    }
+
     public int login(String username, String password)
     {
         Hashtable<String,Account> accounts = Account.getAccountCollection();
@@ -152,4 +239,5 @@ public class Engine
             return true;
         }
     }
+    
 }

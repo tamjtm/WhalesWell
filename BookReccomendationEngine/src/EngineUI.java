@@ -1,3 +1,4 @@
+
 public class EngineUI
 {
     private static Engine engine;
@@ -139,6 +140,8 @@ public class EngineUI
             System.out.println("  1. Show all books");
             System.out.println("  2. Show content-based book suggestion");
             System.out.println("  3. Show community-based book suggestion");
+            System.out.println("  4. Select book");
+            System.out.println("  5. Buy book");
             System.out.println("-------------------------------------------------");
 
             System.out.printf("Choose your command number or others to logout.. ");
@@ -149,10 +152,24 @@ public class EngineUI
                     engine.printAll();
                     break;
                 case "2":
-                    System.out.println("content-based book suggestion");
+                    System.out.println("\nContent-based book suggestion");
+                    engine.showContentSuggest();
                     break;
                 case "3":
-                    System.out.println("content-based book suggestion");
+                    System.out.println("\nCommunity-based book suggestion");
+                    break;
+                case "4":
+                    String title = IOUtils.getString("Please enter book title");
+                    if(engine.printSelectedBook(title))
+                    {
+                        System.out.println("Back to Menu..");
+                    }
+                    break;
+                case "5":
+                    if(engine.buyBook())
+                    {
+                        System.out.println("Buying successfully");
+                    }
                     break;
                 default:
                     engine.logout();

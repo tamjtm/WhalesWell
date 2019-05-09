@@ -1,3 +1,4 @@
+import java.beans.Customizer;
 import java.util.ArrayList;
 
 public class Book
@@ -9,7 +10,7 @@ public class Book
     private ArrayList<String> keyword;
     private int price;
     private int purchasedAmount;
-    //private ArrayList<Account> purchaser;
+    //private ArrayList<Customer> purchaser;
 
     public Book(String title, String author, String category, int length, ArrayList<String> keyword, int price)
     {

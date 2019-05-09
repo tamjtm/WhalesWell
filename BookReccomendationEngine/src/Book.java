@@ -1,4 +1,6 @@
+import java.beans.Customizer;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Book
 {
@@ -9,7 +11,8 @@ public class Book
     private ArrayList<String> keyword;
     private int price;
     private int purchasedAmount;
-    //private ArrayList<Account> purchaser;
+    private ArrayList<Account> purchaser = new ArrayList<Account>();
+    private static Hashtable<String,Book> bookCollection = new Hashtable<String,Book>();
 
     public Book(String title, String author, String category, int length, ArrayList<String> keyword, int price)
     {
@@ -20,20 +23,47 @@ public class Book
         this.keyword = keyword;
         this.price = price;
         purchasedAmount = 0;
+        bookCollection.put(title, this);
     }
 
     public ArrayList<String> getKeyword() {
         return keyword;
     }
 
+    public static Hashtable<String, Book> getBookCollection()
+    {
+        return bookCollection;
+    }
+
+    public boolean addPurchaser(Account currentPurchaser)
+    {
+        //if user hasn't bougth this book before
+        if (!purchaser.contains(currentPurchaser))
+        {
+            purchaser.add(currentPurchaser);            
+        }
+        //For check, if user was added to list
+        if(purchaser.contains(currentPurchaser))
+        {
+            purchasedAmount++;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
-        /*return "Title: " + title +
+        
+        return "\nTitle: " + title +
                 "\nAuthor: " + author +
                 "\nCategory: " + category +
                 "\nNumber of Pages: " + length +
                 "\nKeyword: " + keyword.toString() +
-                "\nPrice: " + price + " ฿\n\n";*/
-        return title;
+                "\nPrice: " + price + " Baht\n";
+                
+        //return title + "\n";
     }
 }

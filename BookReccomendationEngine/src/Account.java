@@ -8,7 +8,7 @@ public class Account
     private String name;
     private String surname;
     private Customer customer;
-    static private Hashtable<String,Account> accountCollection = new Hashtable<String, Account>();
+    static private Hashtable<String,Account> accountCollection = new Hashtable<String,Account>();
 
     public Account(String username, String password, String name, String surname)
     {
@@ -28,6 +28,11 @@ public class Account
     public static Hashtable<String, Account> getAccountCollection()
     {
         return accountCollection;
+    }
+
+    public Customer getCustomer()
+    {
+        return customer;
     }
 
     public void login()
