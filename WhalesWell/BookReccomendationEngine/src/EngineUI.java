@@ -1,3 +1,6 @@
+import javax.swing.text.html.HTMLDocument;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class EngineUI
 {
@@ -140,11 +143,12 @@ public class EngineUI
             System.out.println("  1. Show all books");
             System.out.println("  2. Show content-based book suggestion");
             System.out.println("  3. Show community-based book suggestion");
-            System.out.println("  4. Select book");
-            System.out.println("  5. Buy book");
+            System.out.println("  4. Search book");
+            System.out.println("  5. Select book");
+            System.out.println("  6. Buy book");
             System.out.println("-------------------------------------------------");
 
-            System.out.printf("Choose your command number or others to logout.. ");
+            System.out.printf("Choose your command number or type quit to logout.. ");
             String command = IOUtils.getBareString();
 
             switch (command) {
@@ -159,23 +163,55 @@ public class EngineUI
                     System.out.println("\nCommunity-based book suggestion");
                     break;
                 case "4":
-                    String title = IOUtils.getString("Please enter book title");
+                    String keyword = IOUtils.getString("Please enter book keyword :");
+                    ArrayList<Book> foundBook = engine.searchBook(keyword);
+                    if(foundBook != null)
+                    {
+                        printBooks(foundBook);
+                    }
+                    System.out.println("\n\tPress enter key to back to Menu..");
+                    IOUtils.getBareString();
+                    break;
+                case "5":
+                    String title = IOUtils.getString("Please enter book title :");
                     if(engine.printSelectedBook(title))
                     {
                         System.out.println("Back to Menu..");
                     }
                     break;
-                case "5":
+                case "6":
                     if(engine.buyBook())
                     {
                         System.out.println("Buying successfully");
                     }
                     break;
                 default:
-                    engine.logout();
-                    return;
+                    System.out.println("\tplease try again");
+                    break;
+            }
+            if (command.equalsIgnoreCase("quit"))
+            {
+                engine.logout();
+                System.out.println("\tLogout success!");
+                return;
             }
         }
+    }
+
+    private static void printBooks(ArrayList<Book> books)
+    {
+        Iterator<Book> bookIterator = books.iterator();
+        do
+        {
+            Book book = bookIterator.next();
+            System.out.println(book);
+        }
+        while (bookIterator.hasNext());
+    }
+
+    public static void showProfile()
+    {
+        engine.getCurrentUser();
     }
 
     public static void main(String args[])
@@ -185,6 +221,7 @@ public class EngineUI
         // loop until user login -> if user already login, logout
         while (engine.getCurrentUser() == null)
         {
+            System.out.println("Say hi from Chertam");
             showLoginPage();
         }
 
