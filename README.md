@@ -11,3 +11,5 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Edit 'Book' class, getSearchBooks return ArrayList<Book>
   Edit 'Book' class. add method 'getBookCollection'
   Edit 'Engine' class. 'printSelectedBook' and 'buyBook' change parameter to (title:String)
+
+5th upload : update sequence diagram - Buy Book
