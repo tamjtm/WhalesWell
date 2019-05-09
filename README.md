@@ -23,4 +23,4 @@ CPE343 OOD Team Project : Book Recommendation Engine
   now user can use menu, login, logout, and register without checking any string format
   
 8th upload : update code
-  user can buy book, view content suggestion (haven't limit amount of suggest yet)
+  user can buy book, view content suggestion (haven't limit book amount of suggest yet)
