@@ -155,9 +155,7 @@ public class Engine
 
     }
 
-    public boolean showContentSuggest()
     {
-        //Find latest book
         Customer customer = currentUser.getCustomer();
         ArrayList<History> customerHistory = customer.getPurchasedHistory();
         ArrayList<Book> suggestedBooks = new ArrayList<Book>();
@@ -167,29 +165,19 @@ public class Engine
         }
         else
         {
-            History latestBought = customerHistory.get(customerHistory.size()-1);
-            Book latestBook = latestBought.getBook();
             for(int i=1; i<latestBook.getKeyword().size(); i++)
             {
                 String keyword = latestBook.getKeyword().get(i);
                 if(bookCollection.containsKey(keyword))
                 {
-                    suggestedBooks = bookCollection.get(keyword);
-                    if(suggestedBooks.size()>0)
-                    {
-                        for(int j=0;j<suggestedBooks.size();j++)
                         {
-                            if(suggestedBooks.get(j) == latestBook)
                             {
-                                suggestedBooks.remove(j);
                             }
                         }
                     }
                 }
             }
-            System.out.println(suggestedBooks);
         }
-        return true;
 
     }
 

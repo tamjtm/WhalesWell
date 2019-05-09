@@ -157,7 +157,6 @@ public class EngineUI
                     break;
                 case "2":
                     System.out.println("\nContent-based book suggestion");
-                    engine.showContentSuggest();
                     break;
                 case "3":
                     System.out.println("\nCommunity-based book suggestion");
