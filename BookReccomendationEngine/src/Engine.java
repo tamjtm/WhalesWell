@@ -6,7 +6,6 @@ public class Engine
     static private Hashtable<String,ArrayList<Book>> bookCollection;
     private Account currentUser;
 
-
     public Engine()
     {
         bookCollection = new Hashtable<String,ArrayList<Book>>();

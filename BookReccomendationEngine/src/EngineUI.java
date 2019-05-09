@@ -1,4 +1,6 @@
+import javax.swing.text.html.HTMLDocument;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class EngineUI
 {
@@ -165,7 +167,7 @@ public class EngineUI
                     ArrayList<Book> foundBook = engine.searchBook(keyword);
                     if(foundBook != null)
                     {
-                        System.out.println(foundBook);
+                        printBooks(foundBook);
                     }
                     System.out.println("\n\tPress enter key to back to Menu..");
                     IOUtils.getBareString();
@@ -194,6 +196,17 @@ public class EngineUI
                 return;
             }
         }
+    }
+
+    public static void printBooks(ArrayList<Book> books)
+    {
+        Iterator<Book> bookIterator = books.iterator();
+        do
+        {
+            Book book = bookIterator.next();
+            System.out.println(book);
+        }
+        while (bookIterator.hasNext());
     }
 
     public static void main(String args[])
