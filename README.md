@@ -34,3 +34,7 @@ CPE343 OOD Team Project : Book Recommendation Engine
 10th upload: update class diagram
   Edit 'Book' class, change 'addPurchaser' parameter
   Edit 'Book' class, change 'getPurchaser' return datatype
+  
+11th upload: update code and sequence diagram
+  Code: 'Engine' class, edit contentSuggest and add commuSuggest
+  Sequence: Edit Content-based suggestion diagram
