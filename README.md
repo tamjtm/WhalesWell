@@ -30,3 +30,7 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Edit menu to search book
   Update BookDB.txt (change all keyword to upper case)
   Add EngineUI Class and edit Engine Class for class diagram
+
+10th upload: update class diagram
+  Edit 'Book' class, change 'addPurchaser' parameter
+  Edit 'Book' class, change 'getPurchaser' return datatype
