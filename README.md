@@ -21,3 +21,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
 7th upload : update code
   Add EngineUI Class (contain main() method) for display UI to user
   now user can use menu, login, logout, and register without checking any string format
+  
+8th upload : update code
+  user can buy book, view content suggestion (haven't limit amount of suggest yet)
