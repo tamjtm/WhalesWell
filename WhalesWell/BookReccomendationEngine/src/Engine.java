@@ -6,7 +6,6 @@ public class Engine
     static private Hashtable<String,ArrayList<Book>> bookCollection;
     private Account currentUser;
 
-
     public Engine()
     {
         bookCollection = new Hashtable<String,ArrayList<Book>>();
@@ -90,26 +89,43 @@ public class Engine
         }
     }
 
+    public ArrayList<Book> searchBook(String keyword)
+    {
+        ArrayList<Book> foundBook = new ArrayList<Book>();
+
+        keyword = keyword.toUpperCase();
+        if(!bookCollection.containsKey(keyword))
+        {
+            System.out.println("\tNo " + keyword + " in library");
+            return null;
+        }
+        else
+        {
+            foundBook = bookCollection.get(keyword);
+            return foundBook;
+        }
+    }
+
     public boolean printSelectedBook(String title)
     {
         Hashtable<String, Book> bookShelf = Book.getBookCollection();
         //If there is matched book
-        if(bookShelf.containsKey(title))    
+        if(bookShelf.containsKey(title))
         {
             Book selectedBook = bookShelf.get(title);
             System.out.println(selectedBook);
-            return true;   
+            return true;
         }
         else
         {
-            System.out.println("Cannot find the book.");
-            return false;   
+            System.out.println("\tCannot find the book.");
+            return false;
         }
     }
 
     public boolean buyBook()
     {
-        String title = IOUtils.getString("Please enter book title");
+        String title = IOUtils.getString("Please enter book title :");
         if(printSelectedBook(title))
         {
             String response = IOUtils.getString("Confirm buying... [Y/N]");
@@ -117,7 +133,7 @@ public class Engine
             {
                 Hashtable<String, Book> bookShelf = Book.getBookCollection();
                 Book book = bookShelf.get(title);
-                
+
                 //Add book's purchaser
                 if(book.addPurchaser(currentUser))
                 {
@@ -136,7 +152,7 @@ public class Engine
         {
             return false;
         }
-        
+
     }
 
     public boolean showContentSuggest()
@@ -166,7 +182,7 @@ public class Engine
                             if(suggestedBooks.get(j) == latestBook)
                             {
                                 suggestedBooks.remove(j);
-                            }   
+                            }
                         }
                     }
                 }
@@ -239,5 +255,6 @@ public class Engine
             return true;
         }
     }
+
     
 }
