@@ -13,3 +13,7 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Edit 'Engine' class. 'printSelectedBook' and 'buyBook' change parameter to (title:String)
 
 5th upload : update sequence diagram - Buy Book
+
+6th upload : update class diagram 
+  Edit 'Book' class, change 'purchaser' datatype
+  Edit 'Account' class, add 'getCustomer' method
