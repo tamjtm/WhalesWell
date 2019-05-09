@@ -4,7 +4,7 @@ import java.util.Hashtable;
 public class Engine
 {
     static private Hashtable<String,ArrayList<Book>> bookCollection;
-    Account currentUser;
+    private Account currentUser;
 
 
     public Engine()
@@ -12,6 +12,11 @@ public class Engine
         bookCollection = new Hashtable<String,ArrayList<Book>>();
         currentUser = null;
         initializeBook();
+    }
+
+    public Account getCurrentUser()
+    {
+        return currentUser;
     }
 
     public void initializeBook()
@@ -71,19 +76,33 @@ public class Engine
         System.out.println(bookCollection);
     }
 
-    public boolean login(String username, String password)
+    public boolean isUsernameExist(String username)
     {
         Hashtable<String,Account> accounts = Account.getAccountCollection();
 
-        if (!accounts.containsKey(username))    // there is no this username in the system
+        if (accounts.containsKey(username))    // there is this username in the system
         {
-            System.out.println("ERROR - " + username + " does not exist");
+            return true;
+        }
+        else
+        {
             return false;
+        }
+    }
+
+    public int login(String username, String password)
+    {
+        Hashtable<String,Account> accounts = Account.getAccountCollection();
+
+        if(!isUsernameExist(username))  // there is no this username in the system
+        {
+            System.out.println("\tERROR - " + username + " does not exist");
+            return -1;
         }
         else if(currentUser != null)    // there is another user in the system
         {
-            System.out.println("ERROR - system is busy");
-            return false;
+            System.out.println("\tERROR - system is busy");
+            return -2;
         }
         else
         {
@@ -92,14 +111,14 @@ public class Engine
             // wrong password
             if(account.getPassword().compareTo(password) != 0)
             {
-                System.out.println("ERROR - wrong password for " + username);
-                return false;
+                System.out.println("\tERROR - wrong password for " + username);
+                return 0;
             }
             else
             {
                 currentUser = accounts.get(username);
                 currentUser.login();
-                return true;
+                return 1;
             }
         }
     }
@@ -108,12 +127,13 @@ public class Engine
     {
         if(currentUser == null)
         {
-            System.out.println("ERROR - system is empty");
+            System.out.println("\tERROR - system is empty");
             return false;
         }
         else
         {
             currentUser.logout();
+            currentUser = null;
             return true;
         }
     }
@@ -123,7 +143,7 @@ public class Engine
         Hashtable<String,Account> accounts = Account.getAccountCollection();
         if (accounts.containsKey(username))    // there is this username in the system
         {
-            System.out.println("ERROR - " + username + " already exists");
+            System.out.println("\tERROR - " + username + " already exists");
             return false;
         }
         else
