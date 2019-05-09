@@ -24,3 +24,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
   
 8th upload : update code
   user can buy book, view content suggestion (haven't limit book amount of suggest yet)
+  
+9th upload : update code
+  add searchBook() method in Engine Class and edit menu to search book
