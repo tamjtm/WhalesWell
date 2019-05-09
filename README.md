@@ -17,3 +17,7 @@ CPE343 OOD Team Project : Book Recommendation Engine
 6th upload : update class diagram 
   Edit 'Book' class, change 'purchaser' datatype
   Edit 'Account' class, add 'getCustomer' method
+
+7th upload : update code
+  Add EngineUI Class (contain main() method) for display UI to user
+  now user can use menu, login, logout, and register without checking any string format
