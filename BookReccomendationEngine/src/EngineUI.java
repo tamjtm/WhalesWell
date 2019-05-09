@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class EngineUI
 {
@@ -140,11 +141,12 @@ public class EngineUI
             System.out.println("  1. Show all books");
             System.out.println("  2. Show content-based book suggestion");
             System.out.println("  3. Show community-based book suggestion");
-            System.out.println("  4. Select book");
-            System.out.println("  5. Buy book");
+            System.out.println("  4. Search book");
+            System.out.println("  5. Select book");
+            System.out.println("  6. Buy book");
             System.out.println("-------------------------------------------------");
 
-            System.out.printf("Choose your command number or others to logout.. ");
+            System.out.printf("Choose your command number or type quit to logout.. ");
             String command = IOUtils.getBareString();
 
             switch (command) {
@@ -159,21 +161,37 @@ public class EngineUI
                     System.out.println("\nCommunity-based book suggestion");
                     break;
                 case "4":
-                    String title = IOUtils.getString("Please enter book title");
+                    String keyword = IOUtils.getString("Please enter book keyword :");
+                    ArrayList<Book> foundBook = engine.searchBook(keyword);
+                    if(foundBook != null)
+                    {
+                        System.out.println(foundBook);
+                    }
+                    System.out.println("\n\tPress enter key to back to Menu..");
+                    IOUtils.getBareString();
+                    break;
+                case "5":
+                    String title = IOUtils.getString("Please enter book title :");
                     if(engine.printSelectedBook(title))
                     {
                         System.out.println("Back to Menu..");
                     }
                     break;
-                case "5":
+                case "6":
                     if(engine.buyBook())
                     {
                         System.out.println("Buying successfully");
                     }
                     break;
                 default:
-                    engine.logout();
-                    return;
+                    System.out.println("\tplease try again");
+                    break;
+            }
+            if (command.equalsIgnoreCase("quit"))
+            {
+                engine.logout();
+                System.out.println("\tLogout success!");
+                return;
             }
         }
     }

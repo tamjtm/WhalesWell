@@ -90,6 +90,23 @@ public class Engine
         }
     }
 
+    public ArrayList<Book> searchBook(String keyword)
+    {
+        ArrayList<Book> foundBook = new ArrayList<Book>();
+
+        keyword = keyword.toUpperCase();
+        if(!bookCollection.containsKey(keyword))
+        {
+            System.out.println("\tNo " + keyword + " in library");
+            return null;
+        }
+        else
+        {
+            foundBook = bookCollection.get(keyword);
+            return foundBook;
+        }
+    }
+
     public boolean printSelectedBook(String title)
     {
         Hashtable<String, Book> bookShelf = Book.getBookCollection();
