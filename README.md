@@ -26,6 +26,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
   user can buy book, view content suggestion (haven't limit book amount of suggest yet)
   
 9th upload : update code
-  Add searchBook() method in Engine Class
+  Add searchBook() method in Engine Class and printBooks() method in EngineUI Class
   Edit menu to search book
   Update BookDB.txt (change all keyword to upper case)
