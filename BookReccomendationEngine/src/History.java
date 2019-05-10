@@ -18,7 +18,7 @@ public class History
 
     public String toString()
     {
-        return "Time: "+timestamp+"\tTitle: " +purchasedBook.getKeyword().get(0); 
+        return timestamp+"\t" +purchasedBook.getKeyword().get(0); 
     }
 
 }

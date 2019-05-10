@@ -146,7 +146,7 @@ public class EngineUI
             System.out.println("  4. Search book");
             System.out.println("  5. Select book");
             System.out.println("  6. Buy book");
-            System.out.println("  7. View Profile");
+            System.out.println("  7. View profile");
             System.out.println("-------------------------------------------------");
 
             System.out.printf("Choose your command number or type quit to logout.. ");
@@ -154,7 +154,13 @@ public class EngineUI
 
             switch (command) {
                 case "1":
-                    engine.printAll();
+                    ArrayList<Book> allBooks = engine.getAllBooks();
+                    if(allBooks != null)
+                    {
+                        printBooks(allBooks);
+                    }
+                    System.out.println("\n\tPress enter key to back to Menu..");
+                    IOUtils.getBareString();
                     break;
                 case "2":
                     System.out.println("\nContent-based book suggestion");
@@ -204,6 +210,10 @@ public class EngineUI
                 case "7":
                     showProfilePage();
                     break;
+                case "quit":
+                    break;
+                case "exit":
+                    break;
                 default:
                     System.out.println("\tplease try again");
                     break;
@@ -212,6 +222,20 @@ public class EngineUI
             {
                 engine.logout();
                 System.out.println("\tLogout success!");
+                return;
+            }
+            else if (command.equalsIgnoreCase("exit"))
+            {
+                System.out.printf("\n\tType Y to close program.. ");
+                String answer = IOUtils.getBareString();
+
+                // if user want to exit
+                if (answer.equalsIgnoreCase("Y"))
+                {
+                    engine.saveUserDataFile();
+                    System.out.println("\tSaving success!");
+                    System.exit(0);
+                }
                 return;
             }
         }
@@ -224,11 +248,24 @@ public class EngineUI
         String password = user.getPassword();
         String name = user.getName();
         String surname = user.getSurname();
+        ArrayList<History> purchased = user.getCustomer().getPurchasedHistory();
 
         System.out.println("Name: " + name);
         System.out.println("Surname: " + surname);
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
+        System.out.println("History: ");
+        if(purchased.size()==0)
+        {
+            System.out.println("\t-");
+        }
+        else
+        {
+            for(int i=0; i<purchased.size();i++)
+            {
+                System.out.println("   - "+purchased.get(i).toString());
+            }    
+        }
 
         System.out.printf("\n\tType Y to edit profile.. ");
         String answer = IOUtils.getBareString();
@@ -302,7 +339,6 @@ public class EngineUI
     public static void main(String args[])
     {
         EngineUI engineUI = new EngineUI();
-        Account testuser = new Account("tamjtm", "love", "aa", "bb");
 
         // loop until user login -> if user already login, logout
         while (engine.getCurrentUser() == null)

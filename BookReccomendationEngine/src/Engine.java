@@ -1,5 +1,10 @@
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Set;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class Engine
@@ -72,9 +77,16 @@ public class Engine
         }
     }
 
-    public void printAll()
+    public ArrayList<Book> getAllBooks()
     {
-        System.out.println(bookCollection);
+        Hashtable<String, Book> bookShelf = Book.getBookCollection();
+        ArrayList<Book> allBooks = new ArrayList<Book>();
+        Set<String> keys = bookShelf.keySet();
+        for(String key: keys)
+        {
+            allBooks.add(bookShelf.get(key));
+        }
+        return allBooks;
     }
 
     public boolean isUsernameExist(String username)
@@ -198,7 +210,13 @@ public class Engine
             {
                 suggestedBooks.remove(latestBook);
             }
-
+            if(suggestedBooks.size()>10)
+            {
+                while((suggestedBooks.size()-10)>0)
+                {
+                    suggestedBooks.remove(suggestedBooks.size()-1);
+                }
+            }
             return suggestedBooks;
         }
     }
@@ -254,8 +272,15 @@ public class Engine
                     System.out.println("--- Other purchaser(s) haven't bought other book.");
                     return null;
                 }
+                if(suggestedBooks.size()>10)
+                {
+                    while((suggestedBooks.size()-10)>0)
+                    {
+                        suggestedBooks.remove(suggestedBooks.size()-1);
+                    }
+                }
+                return suggestedBooks;
             }
-            return suggestedBooks;
         }
     }
 
@@ -322,6 +347,61 @@ public class Engine
         }
     }
 
+    public boolean saveUserDataFile()
+    {
+        try
+        {
+            File file = new  File("UserData.txt");
 
-    
+            if (!file.exists()) 
+            {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            Hashtable<String,Account> accounts = Account.getAccountCollection();
+            Set<String> keys = accounts.keySet();
+            for(String key: keys)
+            {
+                Account account = accounts.get(key);
+                bw.write(account.getUsername()+","+account.getPassword()+","+
+                            account.getName()+","+account.getSurname()+",");
+                ArrayList<History> histories = account.getCustomer().getPurchasedHistory();
+                for(int i=0;i<histories.size()-1;i++)
+                {
+                    bw.write(histories.get(i).toString()+";");
+                }
+                bw.write(histories.get(histories.size()-1).toString());
+                bw.write("\n");
+            }
+
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+/*
+    public void loadUserDataFile()
+    {
+        FileManager reader = new FileManager();
+
+        if(!reader.open("UserData.txt"))
+        {
+            System.out.println("FAIL!\n\n");
+            System.exit(1);
+        }
+
+        Account nextAccount = reader.loadUserData();
+        while (nextAccount != null)
+        {
+            nextAccount = reader.loadUserData();
+        }
+
+        reader.close();
+    }
+    */
 }
