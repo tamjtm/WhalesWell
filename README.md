@@ -43,5 +43,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Add showEditProfilePage() and showProfilePage() method in EngineUI (ไม่แก้โปรไฟล์ไม่ได้ ถึงไม่พิมพ์ก็จะเปลี่ยนให้อยู่ดี)
   Modify Account Class (add setter and getter method)
 
-13th upload: update class diagram
-  Edit 'Engine' class, change 'showContentSuggest','showCommuSuggest','buyBook' parameter and/or return datatype
+13th upload: update class diagram and sequence diagram
+  Class: Edit 'Engine' class, change 'showContentSuggest','showCommuSuggest','buyBook' parameter and/or return datatype
+  Sequence: Edit Community-based suggestion diagram
