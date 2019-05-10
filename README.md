@@ -46,3 +46,10 @@ CPE343 OOD Team Project : Book Recommendation Engine
 13th upload: update class diagram and sequence diagram
   Class: Edit 'Engine' class, change 'showContentSuggest','showCommuSuggest','buyBook' parameter and/or return datatype
   Sequence: Edit Community-based suggestion diagram
+  
+14th upload: update code
+  Make 'suggest' methods to return (<)10 books in 'Engine' class
+  Add 'saveUserDataFile()' method in 'Engine'
+  Modify 'EngineUI' class to run exit and save file, and show user's history in 'View profile' page
+  Cannot load user data file yet (/* in comment code of 'FileManager' and 'Engine' class */)
+  
