@@ -39,4 +39,10 @@ public class Customer
         purchasedHistory.add(newPurchased);
         return true;
     }
+
+    public boolean loadPurchasedHistory(History history)
+    {
+        purchasedHistory.add(history);
+        return true;
+    }
 }

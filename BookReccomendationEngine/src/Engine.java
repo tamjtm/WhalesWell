@@ -18,6 +18,7 @@ public class Engine
         bookCollection = new Hashtable<String,ArrayList<Book>>();
         currentUser = null;
         initializeBook();
+        loadAccount();
     }
 
     public Account getCurrentUser()
@@ -384,10 +385,12 @@ public class Engine
         }
         return true;
     }
-/*
-    public void loadUserDataFile()
+
+    public void loadAccount()
     {
         FileManager reader = new FileManager();
+        Hashtable<String,Account> accounts = Account.getAccountCollection();
+        Hashtable<String,Book> bookShelf = Book.getBookCollection();
 
         if(!reader.open("UserData.txt"))
         {
@@ -395,13 +398,22 @@ public class Engine
             System.exit(1);
         }
 
-        Account nextAccount = reader.loadUserData();
-        while (nextAccount != null)
+        String customerRecord[] = reader.loadUserData();
+        while (customerRecord != null)
         {
-            nextAccount = reader.loadUserData();
+            Account account = accounts.get(customerRecord[0]);
+            Customer customer = account.getCustomer();
+            String strHistory[] = customerRecord[4].split(";");
+            for(int i=0;i<strHistory.length;i++)
+            {
+                String subHistory[] = strHistory[i].split("\t");
+                Book purchasedBook = bookShelf.get(subHistory[1]);
+                History history = new History(purchasedBook);
+                history.loadHistory(subHistory[0], purchasedBook);
+                customer.loadPurchasedHistory(history);
+            }
+            customerRecord = reader.loadUserData();            
         }
-
         reader.close();
     }
-    */
 }

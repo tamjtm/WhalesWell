@@ -35,33 +35,25 @@ public class FileManager extends TextFileReader
         return keyword;
     }
 
-    /*
-    public Account loadUserData()
+    public String[] loadUserData()
     {
-        Account account = null;
         String line;
+        String fields[] = null;
+        String strHistory = null;
         do
         {
             line = getNextLine();
             if(line != null)
             {
-                String fields[] = line.split(",");
-                account = new Account(fields[0], fields[1], fields[2], fields[3]);
+                fields = line.split(",");
+                Account newAccount = new Account(fields[0], fields[1], fields[2], fields[3]);
+                strHistory = fields[4];
             }
         }
-        while ((newBook == null) && (line != null));
-
-        return newBook;
+        while ((strHistory == null) && (line != null));
+        return fields;
     }
 
-    private ArrayList<String> splitHistory(String field)
-    {
-        String history[] = field.split(";");
 
-        for (int i = 0; i < keywords.length; i++)
-        {
-            String subKey[] = keywords[i].split("\t");
-        }
-    }
-    */
+    
 }
