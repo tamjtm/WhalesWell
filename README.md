@@ -54,3 +54,13 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Modify 'EngineUI' class to run exit and save file, and show user's history in 'View profile' page
   Cannot load user data file yet (/* in comment code of 'FileManager' and 'Engine' class */)
   
+15th upload: update code and class diagram
+  Class:  Edit 'FileManager' class, add methods
+          Edit 'Engine' class, add 'saveUserDataFile' and 'loadAccount' methods
+          Edit 'History' class, add 'loadHistory' method
+          Edit 'Customer' class, add 'loadPurchasedHistory' method
+  Code: Can save to and load data from 'UserData.txt' file
+        Edit 'Engine' class, create loadAccount() method and add to initialize()
+        Edit 'FileManager' class, add 'loadUserData' method to create account and get data from file 
+        Other edit, can see in class diagram above.
+   
