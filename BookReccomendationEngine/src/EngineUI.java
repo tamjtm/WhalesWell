@@ -144,99 +144,75 @@ public class EngineUI
             System.out.println("  2. Show content-based book suggestion");
             System.out.println("  3. Show community-based book suggestion");
             System.out.println("  4. Search book");
-            System.out.println("  5. Select book");
-            System.out.println("  6. Buy book");
-            System.out.println("  7. View profile");
+            System.out.println("  5. Buy book");
+            System.out.println("  6. View profile");
+            System.out.println("  7. Log out");
             System.out.println("-------------------------------------------------");
 
-            System.out.printf("Choose your command number or type quit to logout.. ");
+            System.out.printf("Choose your command number or type exit to close program.. ");
             String command = IOUtils.getBareString();
 
             switch (command) {
-                case "1":
+                case "1":   // show all books
                     ArrayList<Book> allBooks = engine.getAllBooks();
-                    if(allBooks != null)
-                    {
-                        printBooks(allBooks);
-                    }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
+                    printBookList(allBooks);
                     break;
-                case "2":
-                    System.out.println("\nContent-based book suggestion");
+                case "2":   // show Content-based book suggestion
                     ArrayList<Book> suggestBook = engine.showContentSuggest();
                     if(suggestBook != null)
                     {
-                        printBooks(suggestBook);
+                        printBookList(suggestBook);
                     }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
                     break;
-                case "3":
-                    System.out.println("\nCommunity-based book suggestion");
+                case "3":   // show Community-based book suggestion
                     suggestBook = engine.showCommuSuggest();
                     if(suggestBook != null)
                     {
-                        printBooks(suggestBook);
+                        printBookList(suggestBook);
                     }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
                     break;
-                case "4":
+                case "4":   // search book
                     String keyword = IOUtils.getString("Please enter book keyword :");
-                    ArrayList<Book> foundBook = engine.searchBook(keyword);
-                    if(foundBook != null)
+                    ArrayList<Book> foundBooks = engine.searchBook(keyword);
+                    if(foundBooks != null)
                     {
-                        printBooks(foundBook);
-                    }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
-                    break;
-                case "5":
-                    String title = IOUtils.getString("Please enter book title :");
-                    if(engine.printSelectedBook(title))
-                    {
-                        System.out.println("Back to Menu..");
-                    }
-                    System.out.println("\n\tPress enter key to back to Menu..");
-                    IOUtils.getBareString();
-                    break;
-                case "6":
-                    if(engine.buyBook())
-                    {
-                        System.out.println("Buying successfully");
+                        printBookList(foundBooks);
                     }
                     break;
-                case "7":
+                case "5":   // buy book
+                    String title = IOUtils.getString("\tPlease enter book title");
+                    System.out.println(engine.getSelectedBook(title));
+                    String response = IOUtils.getString("Confirm buying... [Y/N]");
+                    if ((response.startsWith("Y")) || (response.startsWith("y")))
+                    {
+                        if(engine.buyBook(title))
+                        {
+                            System.out.println("\tBuying successfully!");
+                        }
+                    }
+                    break;
+                case "6":   // view profile
                     showProfilePage();
                     break;
-                case "quit":
-                    break;
+                case "7":   // log out
+                    engine.logout();
+                    System.out.println("\tLogout success!");
+                    return;
                 case "exit":
-                    break;
+                    System.out.printf("\n\tType Y to close program.. ");
+                    String answer = IOUtils.getBareString();
+
+                    // if user want to exit
+                    if (answer.equalsIgnoreCase("Y"))
+                    {
+                        engine.saveUserDataFile();
+                        System.out.println("\tSaving success!");
+                        System.exit(0);
+                    }
+                    return;
                 default:
                     System.out.println("\tplease try again");
                     break;
-            }
-            if (command.equalsIgnoreCase("quit"))
-            {
-                engine.logout();
-                System.out.println("\tLogout success!");
-                return;
-            }
-            else if (command.equalsIgnoreCase("exit"))
-            {
-                System.out.printf("\n\tType Y to close program.. ");
-                String answer = IOUtils.getBareString();
-
-                // if user want to exit
-                if (answer.equalsIgnoreCase("Y"))
-                {
-                    engine.saveUserDataFile();
-                    System.out.println("\tSaving success!");
-                    System.exit(0);
-                }
-                return;
             }
         }
     }
@@ -305,27 +281,24 @@ public class EngineUI
             return;
         }
 
-        if(!password.equalsIgnoreCase("\n"))
+        if(password.charAt(0) != '\n')
         {
-            System.out.println("OK!");
             user.setPassword(password);
         }
 
-        if(!name.equalsIgnoreCase("\n"))
+        if(password.charAt(0) != '\n')
         {
-            System.out.println("OK!");
             user.setName(name);
         }
 
-        if(!surname.equalsIgnoreCase("\n"))
+        if(password.charAt(0) != '\n')
         {
-            System.out.println("OK!");
             user.setSurname(surname);
         }
 
     }
 
-    public static void printBooks(ArrayList<Book> books)
+    private static void printBooks(ArrayList<Book> books)
     {
         Iterator<Book> bookIterator = books.iterator();
         do
@@ -334,6 +307,48 @@ public class EngineUI
             System.out.println(book);
         }
         while (bookIterator.hasNext());
+    }
+
+    private static void printTitles(ArrayList<Book> books)
+    {
+        Iterator<Book> bookIterator = books.iterator();
+        int i = 1;
+        do
+        {
+            Book book = bookIterator.next();
+            System.out.println(i + ". " + book.getTitle());
+            i++;
+        }
+        while (bookIterator.hasNext());
+    }
+
+    private static void printBookList(ArrayList<Book> books)
+    {
+
+            if (books != null) {
+                printTitles(books);
+            }
+            System.out.printf("\n\tchoose book number to view book details.. ");
+            String bookNumber = IOUtils.getBareString();
+            if ((bookNumber.charAt(0) == '\n' || (bookNumber.charAt(0) < 49 || bookNumber.charAt(0) > 57))) {
+                return;
+            } else {
+                Book selectedBook = engine.getSelectedBook(books, Integer.parseInt(bookNumber));
+                if (selectedBook != null) {
+                    System.out.println(selectedBook);
+                    System.out.printf("\ttype Y to buy this book or press enter to back.. ");
+                    String buyingStatus = IOUtils.getBareString();
+                    if (buyingStatus.equalsIgnoreCase("y")) {
+                        if (engine.buyBook(selectedBook.getTitle())) {
+                            System.out.println("\n\tBuying successfully!");
+                        }
+                    }
+                } else {
+                    System.out.println("ERROR - cannot print book list");
+                    return;
+                }
+            }
+        return;
     }
 
     public static void main(String args[])
@@ -345,6 +360,5 @@ public class EngineUI
         {
             showLoginPage();
         }
-
     }
 }

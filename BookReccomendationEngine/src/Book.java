@@ -11,7 +11,7 @@ public class Book
     private ArrayList<String> keyword;
     private int price;
     private int purchasedAmount;
-    private ArrayList<Account> purchaser = new ArrayList<Account>();
+    private ArrayList<Account> purchaser;
     private static Hashtable<String,Book> bookCollection = new Hashtable<String,Book>();
 
     public Book(String title, String author, String category, int length, ArrayList<String> keyword, int price)
@@ -23,7 +23,13 @@ public class Book
         this.keyword = keyword;
         this.price = price;
         purchasedAmount = 0;
+        purchaser = new ArrayList<Account>();
         bookCollection.put(title, this);
+    }
+
+    public String getTitle()
+    {
+        return title;
     }
 
     public ArrayList<String> getKeyword() {
@@ -47,7 +53,7 @@ public class Book
 
     public boolean addPurchaser(Account currentPurchaser)
     {
-        //if user hasn't bougth this book before
+        //if user hasn't bought this book before
         if (!purchaser.contains(currentPurchaser))
         {
             purchaser.add(currentPurchaser);            

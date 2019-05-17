@@ -1,7 +1,6 @@
+import javax.swing.text.html.HTMLDocument;
 import java.io.BufferedWriter;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class Engine
         bookCollection = new Hashtable<String,ArrayList<Book>>();
         currentUser = null;
         initializeBook();
-        loadAccount();
+        initializeAccount();
     }
 
     public Account getCurrentUser()
@@ -121,53 +120,74 @@ public class Engine
         }
     }
 
-    public boolean printSelectedBook(String title)
+    public Book getSelectedBook(String title)
     {
         Hashtable<String, Book> bookShelf = Book.getBookCollection();
+        Book selectedBook = null;
         //If there is matched book
-        if(bookShelf.containsKey(title))    
+        title = title.toUpperCase();
+        if(bookShelf.containsKey(title))
         {
-            Book selectedBook = bookShelf.get(title);
-            System.out.println(selectedBook);
-            return true;   
+            selectedBook = bookShelf.get(title);
+            return selectedBook;
         }
         else
         {
             System.out.println("--- Cannot find the book.");
-            return false;   
+            return selectedBook;
         }
     }
 
-    public boolean buyBook()
+    public Book getSelectedBook(int index)
     {
-        String title = IOUtils.getString("Please enter book title");
-        if(printSelectedBook(title))
+        Hashtable<String, Book> bookShelf = Book.getBookCollection();
+        Iterator<Map.Entry<String,Book>> iterator = bookShelf.entrySet().iterator();
+        Map.Entry<String,Book> selectedBook = null;
+        int i = 0;
+
+        do
         {
-            String response = IOUtils.getString("Confirm buying... [Y/N]");
-            if ((response.startsWith("Y")) || (response.startsWith("y")))
-            {
-                Hashtable<String, Book> bookShelf = Book.getBookCollection();
-                Book book = bookShelf.get(title);
-                
-                //Add book's purchaser
-                if(book.addPurchaser(currentUser))
-                {
-                    //Add book to customer's history
-                    Customer customer = currentUser.getCustomer();
-                    customer.addPurchasedHistory(book);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            selectedBook = iterator.next();
+            i++;
+        }
+        while (iterator.hasNext() && i < index);
+        return selectedBook.getValue();
+    }
+
+    public Book getSelectedBook(ArrayList<Book> books, int index)
+    {
+        Iterator<Book> bookIterator = books.iterator();
+        Book book = null;
+        int i = 0;
+        do
+        {
+            book = bookIterator.next();
+            i++;
+        }
+        while (bookIterator.hasNext() && i < index);
+
+        return book;
+    }
+
+    public boolean buyBook(String title)
+    {
+        Hashtable<String, Book> bookShelf = Book.getBookCollection();
+        title = title.toUpperCase();
+        Book book = bookShelf.get(title);
+
+        //Add book's purchaser
+        if(book.addPurchaser(currentUser))
+        {
+            //Add book to customer's history
+            Customer customer = currentUser.getCustomer();
+            customer.addPurchasedHistory(book);
+            return true;
         }
         else
         {
+            System.out.println("ERROR - cannot buy book");
             return false;
         }
-        
     }
 
     public ArrayList<Book> showContentSuggest()
@@ -187,7 +207,8 @@ public class Engine
         {
             //Get latest book
             Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
-            System.out.println("Reference on: \n"+latestBook+"\n");
+            System.out.println("Reference on: \n"+latestBook);
+            System.out.println("+ + + Content-based book suggestion + + +\n");
 
             for(int i=1; i<latestBook.getKeyword().size(); i++)
             {
@@ -240,7 +261,8 @@ public class Engine
             Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
             ArrayList<Account> purchaser = latestBook.getPurchaser();
             purchaser.remove(currentUser);
-            System.out.println("Reference on: \n"+latestBook+"\n");
+            System.out.println("Reference on: \n"+latestBook);
+            System.out.println("+ + + Community-based book suggestion + + +\n");
             if(purchaser.size()==0)
             {
                 System.out.println("--- No user has bought this book before.");
@@ -350,70 +372,13 @@ public class Engine
 
     public boolean saveUserDataFile()
     {
-        try
-        {
-            File file = new  File("UserData.txt");
-
-            if (!file.exists()) 
-            {
-                file.createNewFile();
-            }
-
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            Hashtable<String,Account> accounts = Account.getAccountCollection();
-            Set<String> keys = accounts.keySet();
-            for(String key: keys)
-            {
-                Account account = accounts.get(key);
-                bw.write(account.getUsername()+","+account.getPassword()+","+
-                            account.getName()+","+account.getSurname()+",");
-                ArrayList<History> histories = account.getCustomer().getPurchasedHistory();
-                for(int i=0;i<histories.size()-1;i++)
-                {
-                    bw.write(histories.get(i).toString()+";");
-                }
-                bw.write(histories.get(histories.size()-1).toString());
-                bw.write("\n");
-            }
-
-            bw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
+        FileManager fileManager = new FileManager();
+        return fileManager.saveUser();
     }
 
-    public void loadAccount()
+    public void initializeAccount()
     {
-        FileManager reader = new FileManager();
-        Hashtable<String,Account> accounts = Account.getAccountCollection();
-        Hashtable<String,Book> bookShelf = Book.getBookCollection();
-
-        if(!reader.open("UserData.txt"))
-        {
-            System.out.println("FAIL!\n\n");
-            System.exit(1);
-        }
-
-        String customerRecord[] = reader.loadUserData();
-        while (customerRecord != null)
-        {
-            Account account = accounts.get(customerRecord[0]);
-            Customer customer = account.getCustomer();
-            String strHistory[] = customerRecord[4].split(";");
-            for(int i=0;i<strHistory.length;i++)
-            {
-                String subHistory[] = strHistory[i].split("\t");
-                Book purchasedBook = bookShelf.get(subHistory[1]);
-                History history = new History(purchasedBook);
-                history.loadHistory(subHistory[0], purchasedBook);
-                customer.loadPurchasedHistory(history);
-            }
-            customerRecord = reader.loadUserData();            
-        }
-        reader.close();
+        FileManager fileManager = new FileManager();
+        fileManager.loadAccount();
     }
 }
