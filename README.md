@@ -63,4 +63,10 @@ CPE343 OOD Team Project : Book Recommendation Engine
         Edit 'Engine' class, create loadAccount() method and add to initialize()
         Edit 'FileManager' class, add 'loadUserData' method to create account and get data from file 
         Other edit, can see in class diagram above.
-   
+
+16th upload: update code
+  Code: Modify editProfile() method complete!
+        Modify Book Class (add purchaser initializing to constructor method) and Add getTitile() method
+        Modify EngineUI Class (mainMenuPage) and Add new method (printBookList)
+        Modify Engine Class (showSuggest UI, saveUserDataFile, buyBook) and Add new method (getSelectedBook, initializeAccount)
+        Move file method to FileMenager Class
