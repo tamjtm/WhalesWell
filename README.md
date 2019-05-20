@@ -71,5 +71,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
         Modify Engine Class (showSuggest UI, saveUserDataFile, buyBook) and Add new method (getSelectedBook, initializeAccount)
         Move file method to FileMenager Class
 
-17th upload: update code
+17th upload: update code & class diagram
   Code: Modify EngineUI Class (about UI, loop, solve index problem)
+  Class: Relate with code (modifiy Engine, EngineUI, Book + Add FileManager Class)
