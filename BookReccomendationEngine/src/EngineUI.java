@@ -28,7 +28,7 @@ public class EngineUI
             System.out.printf("Surname: ");
             surname = IOUtils.getBareString();
 
-            System.out.printf("\nType Y to confirm registration.. ");
+            System.out.printf("\nType Y to confirm registration or other key to cancel.. ");
             confirmStatus = IOUtils.getBareString();
         }
         while (!confirmStatus.equalsIgnoreCase("Y"));
@@ -65,7 +65,7 @@ public class EngineUI
                 System.out.printf("Surname: ");
                 surname = IOUtils.getBareString();
 
-                System.out.printf("\nType Y to confirm registration.. ");
+                System.out.printf("\nType Y to confirm registration or other key to cancel.. ");
                 confirmStatus = IOUtils.getBareString();
             }
             while (!confirmStatus.equalsIgnoreCase("Y"));
@@ -83,10 +83,20 @@ public class EngineUI
     private static void showLoginPage()
     {
         System.out.println("\n------------------ L O G I N ------------------");
+        System.out.println("** You can type register/exit too.\n");
         System.out.printf("Username: ");
         String username = IOUtils.getBareString();
 
-        if (engine.isUsernameExist(username))   // no this username exist
+        if(username.equalsIgnoreCase("register"))
+        {
+            showRegisterPage();
+        }
+        else if(username.equalsIgnoreCase("exit"))
+        {
+            exit();
+            return;
+        }
+        else if (engine.isUsernameExist(username))   // no this username exist
         {
             System.out.printf("Password: ");
             String password = IOUtils.getBareString();
@@ -99,7 +109,7 @@ public class EngineUI
             }
             else if(loginStatus == 0)
             {
-                System.out.printf("\nThis username is your account?. Type Y to login again.. ");
+                System.out.printf("\nThis username is your account? Type Y to login again or other key to cancel.. ");
                 String tryingStatus = IOUtils.getBareString();
                 if (tryingStatus.equalsIgnoreCase("Y"))
                 {
@@ -108,7 +118,7 @@ public class EngineUI
                 }
                 else
                 {
-                    showRegisterPage();
+                    return;
                 }
             }
             else
@@ -119,7 +129,7 @@ public class EngineUI
         }
         else
         {
-            System.out.printf("\nThis username does not exist. Type Y to register.. ");
+            System.out.printf("\nThis username does not exist. Type Y to register or other key to cancel.. ");
             String registerStatus = IOUtils.getBareString();
 
             // if user want to register
@@ -144,20 +154,21 @@ public class EngineUI
             System.out.println("  2. Show content-based book suggestion");
             System.out.println("  3. Show community-based book suggestion");
             System.out.println("  4. Search book");
-            System.out.println("  5. Buy book");
-            System.out.println("  6. View profile");
-            System.out.println("  7. Log out");
+            System.out.println("  5. View profile");
+            System.out.println("  6. Log out");
             System.out.println("-------------------------------------------------");
 
-            System.out.printf("Choose your command number or type exit to close program.. ");
+            System.out.printf("Choose your command number or type exit.. ");
             String command = IOUtils.getBareString();
 
             switch (command) {
                 case "1":   // show all books
+                    System.out.println("\n\t < < ALL BOOK > > >");
                     ArrayList<Book> allBooks = engine.getAllBooks();
                     printBookList(allBooks);
                     break;
                 case "2":   // show Content-based book suggestion
+                    System.out.println("\n\t< < < CONTENT-BASED BOOK SUGGESTION > > >");
                     ArrayList<Book> suggestBook = engine.showContentSuggest();
                     if(suggestBook != null)
                     {
@@ -165,6 +176,7 @@ public class EngineUI
                     }
                     break;
                 case "3":   // show Community-based book suggestion
+                    System.out.println("\n\t< < < COMMUNITY-BASED BOOK SUGGESTION > > >");
                     suggestBook = engine.showCommuSuggest();
                     if(suggestBook != null)
                     {
@@ -172,44 +184,32 @@ public class EngineUI
                     }
                     break;
                 case "4":   // search book
-                    String keyword = IOUtils.getString("Please enter book keyword :");
+                    System.out.println("\n\t< < < SEARCH BOOK > > >");
+                    String keyword = IOUtils.getString("Please enter book keyword or press enter to back:");
+                    if(keyword.charAt(0) == '\n')
+                    {
+                        break;
+                    }
+
                     ArrayList<Book> foundBooks = engine.searchBook(keyword);
                     if(foundBooks != null)
                     {
                         printBookList(foundBooks);
                     }
                     break;
-                case "5":   // buy book
-                    String title = IOUtils.getString("\tPlease enter book title");
-                    System.out.println(engine.getSelectedBook(title));
-                    String response = IOUtils.getString("Confirm buying... [Y/N]");
-                    if ((response.startsWith("Y")) || (response.startsWith("y")))
-                    {
-                        if(engine.buyBook(title))
-                        {
-                            System.out.println("\tBuying successfully!");
-                        }
-                    }
-                    break;
-                case "6":   // view profile
+                case "5":   // view profile
+                    System.out.println("\n\t< < < PROFILE > > >");
                     showProfilePage();
                     break;
-                case "7":   // log out
+                case "6":   // log out
+                    engine.saveUserDataFile();
+                    System.out.println("\tSaving success!");
                     engine.logout();
                     System.out.println("\tLogout success!");
                     return;
                 case "exit":
-                    System.out.printf("\n\tType Y to close program.. ");
-                    String answer = IOUtils.getBareString();
-
-                    // if user want to exit
-                    if (answer.equalsIgnoreCase("Y"))
-                    {
-                        engine.saveUserDataFile();
-                        System.out.println("\tSaving success!");
-                        System.exit(0);
-                    }
-                    return;
+                    exit();
+                    break;
                 default:
                     System.out.println("\tplease try again");
                     break;
@@ -226,32 +226,36 @@ public class EngineUI
         String surname = user.getSurname();
         ArrayList<History> purchased = user.getCustomer().getPurchasedHistory();
 
-        System.out.println("Name: " + name);
-        System.out.println("Surname: " + surname);
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-        System.out.println("History: ");
-        if(purchased.size()==0)
-        {
-            System.out.println("\t-");
-        }
-        else
-        {
-            for(int i=0; i<purchased.size();i++)
+        do {
+
+            System.out.println("Name: " + name);
+            System.out.println("Surname: " + surname);
+            System.out.println("Username: " + username);
+            System.out.println("Password: " + password);
+            System.out.println("History: ");
+            if (purchased.size() == 0) {
+                System.out.println("\t-");
+            } else {
+                for (int i = 0; i < purchased.size(); i++) {
+                    System.out.println("   - " + purchased.get(i).toString());
+                }
+            }
+
+            System.out.printf("\n\tType Y to edit profile or type back.. ");
+            String answer = IOUtils.getBareString();
+
+            // if user want to edit profile
+            if (answer.equalsIgnoreCase("Y"))
             {
-                System.out.println("   - "+purchased.get(i).toString());
-            }    
+                showEditProfilePage(user);
+            }
+            else if (answer.equalsIgnoreCase("back"))
+            {
+                return;
+            }
+            System.out.println();
         }
-
-        System.out.printf("\n\tType Y to edit profile.. ");
-        String answer = IOUtils.getBareString();
-
-        // if user want to edit profile
-        if (answer.equalsIgnoreCase("Y"))
-        {
-            showEditProfilePage(user);
-        }
-        return;
+        while (true);
     }
 
     private static void showEditProfilePage(Account user)
@@ -264,6 +268,7 @@ public class EngineUI
         do
         {
             System.out.println("\n--------------- E D I T  P R O F I L E ---------------");
+            System.out.println("** press enter if you don't want to change that field.");
             System.out.printf("New password: ");
             password = IOUtils.getBareString();
             System.out.printf("New Name: ");
@@ -281,17 +286,17 @@ public class EngineUI
             return;
         }
 
-        if(password.charAt(0) != '\n')
+        if(password.charAt(0) != '\n' && password.charAt(0) != ' ')
         {
             user.setPassword(password);
         }
 
-        if(password.charAt(0) != '\n')
+        if(name.charAt(0) != '\n' && password.charAt(0) != ' ')
         {
             user.setName(name);
         }
 
-        if(password.charAt(0) != '\n')
+        if(surname.charAt(0) != '\n' && password.charAt(0) != ' ')
         {
             user.setSurname(surname);
         }
@@ -324,30 +329,77 @@ public class EngineUI
 
     private static void printBookList(ArrayList<Book> books)
     {
+        do {
 
-            if (books != null) {
+            int bookNumber;
+            if (books != null)
+            {
+                System.out.println();
                 printTitles(books);
             }
-            System.out.printf("\n\tchoose book number to view book details.. ");
-            String bookNumber = IOUtils.getBareString();
-            if ((bookNumber.charAt(0) == '\n' || (bookNumber.charAt(0) < 49 || bookNumber.charAt(0) > 57))) {
+
+            System.out.printf("\n\tchoose book number to view book details or type back.. ");
+            String bookNumberString = IOUtils.getBareString();
+
+            if (bookNumberString.equalsIgnoreCase("back"))
+            {
                 return;
-            } else {
-                Book selectedBook = engine.getSelectedBook(books, Integer.parseInt(bookNumber));
-                if (selectedBook != null) {
+            }
+
+            try
+            {
+                bookNumber = Integer.parseInt(bookNumberString);
+            }
+            catch (NumberFormatException | NullPointerException e)
+            {
+                System.out.println("\tERROR - please choose book number again\n");
+                continue;
+            }
+
+            if (bookNumber < 1 || bookNumber > books.size())
+            {
+                System.out.println("\tERROR - this book number out of range\n");
+                continue;
+            }
+            else
+            {
+                Book selectedBook = engine.getSelectedBook(books, bookNumber);
+                if (selectedBook != null)
+                {
                     System.out.println(selectedBook);
-                    System.out.printf("\ttype Y to buy this book or press enter to back.. ");
+                    System.out.printf("\ttype Y to buy this book or other key to back.. ");
                     String buyingStatus = IOUtils.getBareString();
-                    if (buyingStatus.equalsIgnoreCase("y")) {
-                        if (engine.buyBook(selectedBook.getTitle())) {
+                    if (buyingStatus.equalsIgnoreCase("y"))
+                    {
+                        if (engine.buyBook(selectedBook.getTitle()))
+                        {
                             System.out.println("\n\tBuying successfully!");
+                            return;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     System.out.println("ERROR - cannot print book list");
                     return;
                 }
             }
+        }
+        while (true);
+    }
+
+    private static void exit()
+    {
+        System.out.printf("\n\tType Y to close program or other key to cancel.. ");
+        String answer = IOUtils.getBareString();
+
+        // if user want to exit
+        if (answer.equalsIgnoreCase("Y"))
+        {
+            engine.saveUserDataFile();
+            System.out.println("\tSaving success!");
+            System.exit(0);
+        }
         return;
     }
 

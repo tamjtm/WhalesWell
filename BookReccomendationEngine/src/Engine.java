@@ -200,7 +200,7 @@ public class Engine
         //Haven't bought any book before  
         if(customerHistory.size()==0)
         {
-            System.out.println("--- Not found book reference.");
+            System.out.println("--- Not found book reference. Please buy any book.");
             return null;
         }
         else
@@ -208,7 +208,7 @@ public class Engine
             //Get latest book
             Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
             System.out.println("Reference on: \n"+latestBook);
-            System.out.println("+ + + Content-based book suggestion + + +\n");
+            System.out.println("+ + + + + + + + + + + + + + + + + + + +");
 
             for(int i=1; i<latestBook.getKeyword().size(); i++)
             {
@@ -252,7 +252,7 @@ public class Engine
         //Haven't bought any book before  
         if(customerHistory.size()==0)
         {
-            System.out.println("--- Not found book reference.");
+            System.out.println("--- Not found book reference. Please buy any book.");
             return null;
         }
         else
@@ -262,7 +262,7 @@ public class Engine
             ArrayList<Account> purchaser = latestBook.getPurchaser();
             purchaser.remove(currentUser);
             System.out.println("Reference on: \n"+latestBook);
-            System.out.println("+ + + Community-based book suggestion + + +\n");
+            System.out.println("+ + + + + + + + + + + + + + + + + + + +");
             if(purchaser.size()==0)
             {
                 System.out.println("--- No user has bought this book before.");
