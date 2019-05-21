@@ -9,7 +9,7 @@ public class EngineUI
 
     public EngineUI()
     {
-        engine = new Engine();
+        engine = engine.getInstance();
         suggestTool = new SuggestTool();
     }
 

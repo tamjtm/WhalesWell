@@ -8,17 +8,24 @@ import java.io.IOException;
 
 public class Engine
 {
+    private static Engine singletonInstance = new Engine();
     static private Hashtable<String,ArrayList<Book>> bookCollection;
     private Account currentUser;
 
 
-    public Engine()
+    private Engine()
     {
         bookCollection = new Hashtable<String,ArrayList<Book>>();
         currentUser = null;
         initializeBook();
         initializeAccount();
     }
+
+    public static Engine getInstance()
+    {
+        return singletonInstance;
+    }
+
 
     public Account getCurrentUser()
     {
