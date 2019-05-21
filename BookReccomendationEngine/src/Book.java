@@ -51,6 +51,16 @@ public class Book
         return purchaser;
     }
 
+    public int getPrice()
+    {
+        return price;
+    }
+
+    public int getLength()
+    {
+        return length;
+    }
+
     public boolean addPurchaser(Account currentPurchaser)
     {
         //if user hasn't bought this book before
@@ -77,7 +87,6 @@ public class Book
                 "\nAuthor: " + author +
                 "\nCategory: " + category +
                 "\nNumber of Pages: " + length +
-                "\nKeyword: " + keyword.toString() +
                 "\nPrice: " + price + " Baht\n";
                 
         //return title + "\n";

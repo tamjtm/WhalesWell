@@ -77,6 +77,11 @@ public class Engine
         }
     }
 
+    public Hashtable<String,ArrayList<Book>> getBookCollection()
+    {
+        return bookCollection;
+    }
+
     public ArrayList<Book> getAllBooks()
     {
         Hashtable<String, Book> bookShelf = Book.getBookCollection();
@@ -187,123 +192,6 @@ public class Engine
         {
             System.out.println("ERROR - cannot buy book");
             return false;
-        }
-    }
-
-    public ArrayList<Book> showContentSuggest()
-    {
-        //Find latest book from customer history
-        Customer customer = currentUser.getCustomer();
-        ArrayList<History> customerHistory = customer.getPurchasedHistory();
-        ArrayList<Book> suggestedBooks = new ArrayList<Book>();
-        ArrayList<Book> tempBook = new ArrayList<Book>();
-        //Haven't bought any book before  
-        if(customerHistory.size()==0)
-        {
-            System.out.println("--- Not found book reference. Please buy any book.");
-            return null;
-        }
-        else
-        {
-            //Get latest book
-            Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
-            System.out.println("Reference on: \n"+latestBook);
-            System.out.println("+ + + + + + + + + + + + + + + + + + + +");
-
-            for(int i=1; i<latestBook.getKeyword().size(); i++)
-            {
-                String keyword = latestBook.getKeyword().get(i);
-                if(bookCollection.containsKey(keyword))
-                {
-                    tempBook = bookCollection.get(keyword);
-                    if(tempBook.size()>1)
-                   {
-                        for(int j=0;j<tempBook.size();j++)
-                        {
-                            if(!suggestedBooks.contains(tempBook.get(j)))
-                            {
-                                suggestedBooks.add(tempBook.get(j));
-                            }
-                        }
-                    }
-                }
-            }
-            if(suggestedBooks.contains(latestBook))
-            {
-                suggestedBooks.remove(latestBook);
-            }
-            if(suggestedBooks.size()>10)
-            {
-                while((suggestedBooks.size()-10)>0)
-                {
-                    suggestedBooks.remove(suggestedBooks.size()-1);
-                }
-            }
-            return suggestedBooks;
-        }
-    }
-
-    public ArrayList<Book> showCommuSuggest()
-    {
-        //Find latest book from customer history
-        Customer customer = currentUser.getCustomer();
-        ArrayList<History> customerHistory = customer.getPurchasedHistory();
-        ArrayList<Book> suggestedBooks = new ArrayList<Book>();
-        //Haven't bought any book before  
-        if(customerHistory.size()==0)
-        {
-            System.out.println("--- Not found book reference. Please buy any book.");
-            return null;
-        }
-        else
-        {
-            //Get latest book
-            Book latestBook = customerHistory.get(customerHistory.size()-1).getBook();
-            ArrayList<Account> purchaser = latestBook.getPurchaser();
-            purchaser.remove(currentUser);
-            System.out.println("Reference on: \n"+latestBook);
-            System.out.println("+ + + + + + + + + + + + + + + + + + + +");
-            if(purchaser.size()==0)
-            {
-                System.out.println("--- No user has bought this book before.");
-                return null;
-            }
-            else
-            {
-                for(int i=0;i<purchaser.size();i++)
-                {
-                    Customer otherCustomer = purchaser.get(i).getCustomer();
-                    ArrayList<History> otherHistory = otherCustomer.getPurchasedHistory();
-                    if(otherHistory.size()>1)
-                    {
-                        for(int j=0;j<otherHistory.size();j++)
-                        {
-                            Book temp = otherHistory.get(j).getBook();
-                            if(!suggestedBooks.contains(temp))
-                            {
-                                suggestedBooks.add(temp);
-                            }
-                        }
-                    }
-                }
-                if(suggestedBooks.contains(latestBook))
-                {
-                    suggestedBooks.remove(latestBook);
-                }
-                if(suggestedBooks.size()==0)
-                {
-                    System.out.println("--- Other purchaser(s) haven't bought other book.");
-                    return null;
-                }
-                if(suggestedBooks.size()>10)
-                {
-                    while((suggestedBooks.size()-10)>0)
-                    {
-                        suggestedBooks.remove(suggestedBooks.size()-1);
-                    }
-                }
-                return suggestedBooks;
-            }
         }
     }
 

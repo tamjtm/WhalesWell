@@ -5,10 +5,12 @@ import java.util.Iterator;
 public class EngineUI
 {
     private static Engine engine;
+    private static SuggestTool suggestTool;
 
     public EngineUI()
     {
         engine = new Engine();
+        suggestTool = new SuggestTool();
     }
 
     private static void showRegisterPage(String username)
@@ -169,7 +171,7 @@ public class EngineUI
                     break;
                 case "2":   // show Content-based book suggestion
                     System.out.println("\n\t< < < CONTENT-BASED BOOK SUGGESTION > > >");
-                    ArrayList<Book> suggestBook = engine.showContentSuggest();
+                    ArrayList<Book> suggestBook = suggestTool.showContentSuggest(engine.getCurrentUser(),engine.getBookCollection());
                     if(suggestBook != null)
                     {
                         printBookList(suggestBook);
@@ -177,7 +179,7 @@ public class EngineUI
                     break;
                 case "3":   // show Community-based book suggestion
                     System.out.println("\n\t< < < COMMUNITY-BASED BOOK SUGGESTION > > >");
-                    suggestBook = engine.showCommuSuggest();
+                    suggestBook = suggestTool.showCommuSuggest(engine.getCurrentUser());
                     if(suggestBook != null)
                     {
                         printBookList(suggestBook);
