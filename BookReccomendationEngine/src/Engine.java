@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class Engine
 {
-    private static Engine singletonInstance = new Engine();
-    static private Hashtable<String,ArrayList<Book>> bookCollection;
+    private static Engine engineInstance = new Engine();
+    private static Hashtable<String,ArrayList<Book>> bookCollection;
     private Account currentUser;
 
 
@@ -19,37 +19,6 @@ public class Engine
         currentUser = null;
         initializeBook();
         initializeAccount();
-    }
-
-    public static Engine getInstance()
-    {
-        return singletonInstance;
-    }
-
-
-    public Account getCurrentUser()
-    {
-        return currentUser;
-    }
-
-    public void initializeBook()
-    {
-        FileManager reader = new FileManager();
-
-        if(!reader.open("BookDB.txt"))
-        {
-            System.out.println("FAIL!\n\n");
-            System.exit(1);
-        }
-
-        Book nextBook = reader.loadBook();
-        while (nextBook != null)
-        {
-            handleKeyword(nextBook);
-            nextBook = reader.loadBook();
-        }
-
-        reader.close();
     }
 
     private void handleKeyword(Book book)
@@ -84,9 +53,14 @@ public class Engine
         }
     }
 
-    public Hashtable<String,ArrayList<Book>> getBookCollection()
+    public static Engine getEngineInstance()
     {
-        return bookCollection;
+        return engineInstance;
+    }
+
+    public Account getCurrentUser()
+    {
+        return currentUser;
     }
 
     public ArrayList<Book> getAllBooks()
@@ -99,6 +73,52 @@ public class Engine
             allBooks.add(bookShelf.get(key));
         }
         return allBooks;
+    }
+
+    public Book getSelectedBook(ArrayList<Book> books, int index)
+    {
+        Iterator<Book> bookIterator = books.iterator();
+        Book book = null;
+        int i = 0;
+        do
+        {
+            book = bookIterator.next();
+            i++;
+        }
+        while (bookIterator.hasNext() && i < index);
+
+        return book;
+    }
+
+    public Hashtable<String,ArrayList<Book>> getBookCollection()
+    {
+        return bookCollection;
+    }
+
+    public void initializeBook()
+    {
+        FileManager reader = new FileManager();
+
+        if(!reader.open("BookDB.txt"))
+        {
+            System.out.println("FAIL!\n\n");
+            System.exit(1);
+        }
+
+        Book nextBook = reader.loadBook();
+        while (nextBook != null)
+        {
+            handleKeyword(nextBook);
+            nextBook = reader.loadBook();
+        }
+
+        reader.close();
+    }
+
+    public void initializeAccount()
+    {
+        FileManager fileManager = new FileManager();
+        fileManager.loadAccount();
     }
 
     public boolean isUsernameExist(String username)
@@ -130,56 +150,7 @@ public class Engine
             foundBook = bookCollection.get(keyword);
             return foundBook;
         }
-    }
-
-    public Book getSelectedBook(String title)
-    {
-        Hashtable<String, Book> bookShelf = Book.getBookCollection();
-        Book selectedBook = null;
-        //If there is matched book
-        title = title.toUpperCase();
-        if(bookShelf.containsKey(title))
-        {
-            selectedBook = bookShelf.get(title);
-            return selectedBook;
-        }
-        else
-        {
-            System.out.println("--- Cannot find the book.");
-            return selectedBook;
-        }
-    }
-
-    public Book getSelectedBook(int index)
-    {
-        Hashtable<String, Book> bookShelf = Book.getBookCollection();
-        Iterator<Map.Entry<String,Book>> iterator = bookShelf.entrySet().iterator();
-        Map.Entry<String,Book> selectedBook = null;
-        int i = 0;
-
-        do
-        {
-            selectedBook = iterator.next();
-            i++;
-        }
-        while (iterator.hasNext() && i < index);
-        return selectedBook.getValue();
-    }
-
-    public Book getSelectedBook(ArrayList<Book> books, int index)
-    {
-        Iterator<Book> bookIterator = books.iterator();
-        Book book = null;
-        int i = 0;
-        do
-        {
-            book = bookIterator.next();
-            i++;
-        }
-        while (bookIterator.hasNext() && i < index);
-
-        return book;
-    }
+    }    
 
     public boolean buyBook(String title)
     {
@@ -271,9 +242,5 @@ public class Engine
         return fileManager.saveUser();
     }
 
-    public void initializeAccount()
-    {
-        FileManager fileManager = new FileManager();
-        fileManager.loadAccount();
-    }
+   
 }

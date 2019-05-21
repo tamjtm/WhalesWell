@@ -3,7 +3,7 @@ import java.util.*;
 
 public class SuggestTool
 {
-    ArrayList<Book> suggestedBooks = new ArrayList<Book>();
+    private ArrayList<Book> suggestedBooks = new ArrayList<Book>();
 
     private Integer countMatchKeyword(Book currentBook,Book latestBook)
     {

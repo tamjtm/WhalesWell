@@ -9,10 +9,21 @@ public class EngineUI
 
     public EngineUI()
     {
-        engine = engine.getInstance();
+        engine = engine.getEngineInstance();
         suggestTool = new SuggestTool();
     }
 
+    public static void main(String args[])
+    {
+        EngineUI engineUI = new EngineUI();
+
+        // loop until user login -> if user already login, logout
+        while (engine.getCurrentUser() == null)
+        {
+            showLoginPage();
+        }
+    }
+    
     private static void showRegisterPage(String username)
     {
         String confirmStatus;
@@ -305,17 +316,6 @@ public class EngineUI
 
     }
 
-    private static void printBooks(ArrayList<Book> books)
-    {
-        Iterator<Book> bookIterator = books.iterator();
-        do
-        {
-            Book book = bookIterator.next();
-            System.out.println(book);
-        }
-        while (bookIterator.hasNext());
-    }
-
     private static void printTitles(ArrayList<Book> books)
     {
         Iterator<Book> bookIterator = books.iterator();
@@ -405,14 +405,5 @@ public class EngineUI
         return;
     }
 
-    public static void main(String args[])
-    {
-        EngineUI engineUI = new EngineUI();
-
-        // loop until user login -> if user already login, logout
-        while (engine.getCurrentUser() == null)
-        {
-            showLoginPage();
-        }
-    }
+    
 }

@@ -9,40 +9,33 @@ public class Customer
     {
         loginStatus = false;
     }
-
+/*
     public boolean getLoginStatus()
     {
         return loginStatus;
     }
-
+*/
     public void setLoginStatus(boolean loginStatus)
     {
         this.loginStatus = loginStatus;
     }
 
-    public void viewPurchasedHistory()
-    {
-        for (int i=0; i<purchasedHistory.size() ; i++)
-        {
-            System.out.println(purchasedHistory.get(i));
-        }
-    }
 
     public ArrayList<History> getPurchasedHistory()
     {
         return purchasedHistory;
     }
 
+    public boolean loadPurchasedHistory(History history)
+    {
+        purchasedHistory.add(history);
+        return true;
+    }
+
     public boolean addPurchasedHistory(Book purchasedBook)
     {
         History newPurchased = new History(purchasedBook);
         purchasedHistory.add(newPurchased);
-        return true;
-    }
-
-    public boolean loadPurchasedHistory(History history)
-    {
-        purchasedHistory.add(history);
         return true;
     }
 }

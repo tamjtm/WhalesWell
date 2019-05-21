@@ -8,7 +8,7 @@ public class Account
     private String name;
     private String surname;
     private Customer customer;
-    static private Hashtable<String,Account> accountCollection = new Hashtable<String,Account>();
+    private static Hashtable<String,Account> accountCollection = new Hashtable<String,Account>();
 
     public Account(String username, String password, String name, String surname)
     {
@@ -28,7 +28,7 @@ public class Account
     public String getPassword()
     {
         return password;
-    }
+    }  
 
     public String getName()
     {
@@ -40,19 +40,9 @@ public class Account
         return surname;
     }
 
-    public void setName(String name)
+    public Customer getCustomer()
     {
-        this.name = name;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public void setSurname(String surname)
-    {
-        this.surname = surname;
+        return customer;
     }
 
     public static Hashtable<String, Account> getAccountCollection()
@@ -60,10 +50,22 @@ public class Account
         return accountCollection;
     }
 
-    public Customer getCustomer()
+    public void setPassword(String password)
     {
-        return customer;
+        this.password = password;
     }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setSurname(String surname)
+    {
+        this.surname = surname;
+    }
+
+    
 
     public void login()
     {

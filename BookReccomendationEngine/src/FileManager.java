@@ -10,6 +10,19 @@ import static java.lang.Integer.parseInt;
 
 public class FileManager extends TextFileReader
 {
+    private ArrayList<String> splitKeyword(String field)
+    {
+        ArrayList<String> keyword = new ArrayList<String>();
+        String keywords[] = field.split(";");
+
+        for (int i = 0; i < keywords.length; i++)
+        {
+            keyword.add(keywords[i]);
+        }
+
+        return keyword;
+    }
+
     public Book loadBook()
     {
         Book newBook = null;
@@ -28,18 +41,56 @@ public class FileManager extends TextFileReader
         return newBook;
     }
 
-    private ArrayList<String> splitKeyword(String field)
+    private String[] loadUserData()
     {
-        ArrayList<String> keyword = new ArrayList<String>();
-        String keywords[] = field.split(";");
-
-        for (int i = 0; i < keywords.length; i++)
+        String line;
+        String fields[] = null;
+        String strHistory = null;
+        do
         {
-            keyword.add(keywords[i]);
+            line = getNextLine();
+            if(line != null)
+            {
+                fields = line.split(",");
+                Account newAccount = new Account(fields[0], fields[1], fields[2], fields[3]);
+                strHistory = fields[4];
+            }
+        }
+        while ((strHistory == null) && (line != null));
+        return fields;
+    }
+    
+    public void loadAccount()
+    {
+        Hashtable<String,Account> accounts = Account.getAccountCollection();
+        Hashtable<String,Book> bookShelf = Book.getBookCollection();
+
+        if(!open("UserData.txt"))
+        {
+            System.out.println("FAIL!\n\n");
+            System.exit(1);
         }
 
-        return keyword;
+        String customerRecord[] = loadUserData();
+        while (customerRecord != null)
+        {
+            Account account = accounts.get(customerRecord[0]);
+            Customer customer = account.getCustomer();
+            String strHistory[] = customerRecord[4].split(";");
+            for(int i=0;i<strHistory.length;i++)
+            {
+                String subHistory[] = strHistory[i].split("\t");
+                Book purchasedBook = bookShelf.get(subHistory[1]);
+                purchasedBook.addPurchaser(account);
+                History history = new History(purchasedBook);
+                history.loadHistory(subHistory[0], purchasedBook);
+                customer.loadPurchasedHistory(history);
+            }
+            customerRecord = loadUserData();
+        }
+        close();
     }
+
 
     public boolean saveUser()
     {
@@ -79,54 +130,6 @@ public class FileManager extends TextFileReader
         return true;
     }
 
-    public void loadAccount()
-    {
-        Hashtable<String,Account> accounts = Account.getAccountCollection();
-        Hashtable<String,Book> bookShelf = Book.getBookCollection();
-
-        if(!open("UserData.txt"))
-        {
-            System.out.println("FAIL!\n\n");
-            System.exit(1);
-        }
-
-        String customerRecord[] = loadUserData();
-        while (customerRecord != null)
-        {
-            Account account = accounts.get(customerRecord[0]);
-            Customer customer = account.getCustomer();
-            String strHistory[] = customerRecord[4].split(";");
-            for(int i=0;i<strHistory.length;i++)
-            {
-                String subHistory[] = strHistory[i].split("\t");
-                Book purchasedBook = bookShelf.get(subHistory[1]);
-                purchasedBook.addPurchaser(account);
-                History history = new History(purchasedBook);
-                history.loadHistory(subHistory[0], purchasedBook);
-                customer.loadPurchasedHistory(history);
-            }
-            customerRecord = loadUserData();
-        }
-        close();
-    }
-
-    private String[] loadUserData()
-    {
-        String line;
-        String fields[] = null;
-        String strHistory = null;
-        do
-        {
-            line = getNextLine();
-            if(line != null)
-            {
-                fields = line.split(",");
-                Account newAccount = new Account(fields[0], fields[1], fields[2], fields[3]);
-                strHistory = fields[4];
-            }
-        }
-        while ((strHistory == null) && (line != null));
-        return fields;
-    }
+    
     
 }
