@@ -74,3 +74,8 @@ CPE343 OOD Team Project : Book Recommendation Engine
 17th upload: update code & class diagram
   Code: Modify EngineUI Class (about UI, loop, solve index problem)
   Class: Relate with code (modifiy Engine, EngineUI, Book + Add FileManager Class)
+
+18th upload: update code
+  Code: Create SuggestTool class 
+        Modify content suggestion method to count match keyword
+        Modify comuu suggestion method to consider purchasedAmount
