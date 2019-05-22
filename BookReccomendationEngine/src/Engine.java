@@ -97,7 +97,7 @@ public class Engine
 
     public void initializeBook()
     {
-        FileManager reader = new FileManager();
+        BookFileReader reader = new BookFileReader();
 
         if(!reader.open("BookDB.txt"))
         {
@@ -117,8 +117,8 @@ public class Engine
 
     public void initializeAccount()
     {
-        FileManager fileManager = new FileManager();
-        fileManager.loadAccount();
+        UserFileManager userFileManager = new UserFileManager();
+        userFileManager.loadAccount();
     }
 
     public boolean isUsernameExist(String username)
@@ -238,8 +238,8 @@ public class Engine
 
     public boolean saveUserDataFile()
     {
-        FileManager fileManager = new FileManager();
-        return fileManager.saveUser();
+        UserFileManager userFileManager = new UserFileManager();
+        return userFileManager.saveUser();
     }
 
    
