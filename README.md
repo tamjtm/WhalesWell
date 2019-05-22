@@ -79,3 +79,6 @@ CPE343 OOD Team Project : Book Recommendation Engine
   Code: Create SuggestTool class 
         Modify content suggestion method to count match keyword
         Modify comuu suggestion method to consider purchasedAmount
+
+19th upload: update code
+        Create BookFileReader and UserFileManager extend TextFileReader instead FileManager  
